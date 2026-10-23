@@ -1,0 +1,15 @@
+---
+interface Props { title?: string }
+const { title = 'Materia Viva — Carta de temporada' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Materia Viva, una carta editorial de temporada." />
+    <meta name="theme-color" content="#5d2030" />
+    <title>{title}</title>
+  </head>
+  <body><slot /></body>
+</html>

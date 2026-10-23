@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DishCard from '../components/DishCard.astro';
+import { beverages, dishes, momentLabels, tastingMenu, type Moment } from '../data/menu';
+import '../styles/global.css';
+const moments = Object.keys(momentLabels) as Moment[];
+---
+<BaseLayout>
+  <main>
+    <header class="hero" id="inicio">
+      <div class="hero__masthead"><p>Barcelona · cocina de temporada</p><a href="#carta">Explorar carta <span aria-hidden="true">↓</span></a></div>
+      <div class="hero__content"><p class="eyebrow">Materia viva / carta 01</p><h1>Lo que la estación<br />pone sobre la mesa.</h1><p class="hero__lede">Una carta que cambia con la luz, el mercado y el fuego. Ingredientes precisos, servidos sin ruido.</p></div>
+      <figure class="hero__image"><img src="/images/materia-viva-hero.png" alt="Composición gastronómica de Materia Viva" width="1200" height="800" fetchpriority="high" /><figcaption>Octubre / 2026</figcaption></figure>
+      <div class="hero__stamp" aria-label="Carta de temporada"><span>Materia<br />Viva</span><i>01</i></div>
+    </header>
+
+    <section class="intro-panel" aria-labelledby="introduccion"><p class="intro-panel__number">01</p><div><p class="eyebrow">El gesto</p><h2 id="introduccion">Cocinar cerca del origen.</h2><p>Platos que dejan ver la materia: una raíz, un caldo, una pieza de mar. Nada llega a la mesa por adorno.</p></div><p class="intro-panel__aside">Alta cocina estacional<br />Mediterráneo contemporáneo</p></section>
+
+    <section class="menu-section" id="carta" aria-labelledby="carta-titulo">
+      <div class="section-heading"><div><p class="eyebrow">La carta</p><h2 id="carta-titulo">Elegir un momento.</h2></div><p>Una secuencia libre de doce platos. Abre cada composición para conocer el producto, la técnica y el maridaje sugerido.</p></div>
+      <nav class="moment-nav" aria-label="Filtrar platos por momento"><button class="moment-nav__button is-active" type="button" data-filter="all" aria-pressed="true">Todo <span>12</span></button>{moments.map((moment) => <button class="moment-nav__button" type="button" data-filter={moment} aria-pressed="false">{momentLabels[moment]}</button>)}</nav>
+      <div class="dish-grid" aria-live="polite">{dishes.map((dish, index) => <DishCard dish={dish} index={index} />)}</div><p class="empty-state" data-empty-state hidden>No hay platos en este momento.</p>
+    </section>
+
+    <section class="tasting-section" id="degustacion" aria-labelledby="degustacion-titulo"><div class="tasting-section__photo"><img src="/images/materia-viva-editorial-grid.png" alt="Ingredientes y elaboración de la cocina" width="1200" height="800" loading="lazy" /></div><div class="tasting-section__content"><p class="eyebrow">Menú degustación</p><p class="tasting-section__number">0{tastingMenu.courses}</p><h2 id="degustacion-titulo">{tastingMenu.name}</h2><p class="tasting-section__description">Siete pases para leer la estación de principio a fin. Un recorrido que se sirve a mesa completa.</p><p class="tasting-section__price">{tastingMenu.price} € <span>· {tastingMenu.duration}</span></p><details><summary>Ver los siete pases <span aria-hidden="true">+</span></summary><ol>{tastingMenu.dishes.map((dish) => <li>{dish}</li>)}</ol></details></div></section>
+
+    <section class="drinks-section" id="bebidas" aria-labelledby="bebidas-titulo"><div class="section-heading section-heading--drinks"><div><p class="eyebrow">Selección líquida</p><h2 id="bebidas-titulo">Beber con el plato.</h2></div><p>Una selección corta de copas y fermentos propios para acompañar, no para ocupar espacio.</p></div><div class="drinks-grid">{(['vino', 'sin alcohol'] as const).map((kind) => <section class="drink-list" aria-labelledby={`${kind}-titulo`}><h3 id={`${kind}-titulo`}>{kind === 'vino' ? 'Por copa' : 'Sin alcohol'}</h3>{beverages.filter((drink) => drink.kind === kind).map((drink) => <div class="drink-list__item"><div><strong>{drink.name}</strong><span>{drink.origin} · {drink.profile}</span></div><b>{drink.price} €</b></div>)}</section>)}</div></section>
+
+    <section class="allergen-note" aria-labelledby="alergenos-titulo"><p class="eyebrow">Antes de sentarse</p><h2 id="alergenos-titulo">Todo está en la mesa.</h2><p>Los alérgenos y las posibles adaptaciones se muestran en cada plato. Confírmalos siempre con el equipo de sala: esta carta evoluciona con el mercado.</p></section>
+    <footer class="site-footer"><p>Materia Viva <span>—</span> Carta ficticia de demostración</p><a href="#inicio">Volver arriba <span aria-hidden="true">↑</span></a></footer>
+  </main>
+
+  {dishes.map((dish) => <dialog class="dish-dialog" id={`dialog-${dish.slug}`} aria-labelledby={`dialog-title-${dish.slug}`}><button class="dish-dialog__close" type="button" data-close-dish aria-label={`Cerrar información de ${dish.name}`}>×</button><div class="dish-dialog__image"><img src={dish.image === 'hero' ? '/images/materia-viva-hero.png' : '/images/materia-viva-editorial-grid.png'} alt="" width="1200" height="800" /></div><div class="dish-dialog__body"><p class="eyebrow">{momentLabels[dish.moment]} · {dish.price} €</p><h2 id={`dialog-title-${dish.slug}`}>{dish.name}</h2><p class="dish-dialog__summary">{dish.summary}</p><p>{dish.story}</p><dl><div><dt>Técnica</dt><dd>{dish.technique}</dd></div><div><dt>Sabores</dt><dd>{dish.flavours}</dd></div><div><dt>Ingredientes</dt><dd>{dish.ingredients.join(' · ')}</dd></div><div><dt>Alérgenos</dt><dd>{dish.allergens.join(' · ')}</dd></div><div><dt>Adaptaciones</dt><dd>{dish.dietary.join(' · ')}</dd></div><div><dt>En copa</dt><dd>{dish.pairing}</dd></div></dl></div></dialog>)}
+
+  <script>
+    const filters = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = document.querySelectorAll<HTMLElement>('[data-dish]');
+    const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
+    filters.forEach((button) => button.addEventListener('click', () => { const filter = button.dataset.filter; let visible = 0; filters.forEach((item) => { const active = item === button; item.classList.toggle('is-active', active); item.setAttribute('aria-pressed', String(active)); }); cards.forEach((card) => { const show = filter === 'all' || card.dataset.moment === filter; card.hidden = !show; if (show) visible += 1; }); if (emptyState) emptyState.hidden = visible > 0; }));
+    document.querySelectorAll<HTMLButtonElement>('[data-open-dish]').forEach((button) => button.addEventListener('click', () => document.querySelector<HTMLDialogElement>(`#dialog-${button.dataset.openDish}`)?.showModal()));
+    document.querySelectorAll<HTMLDialogElement>('.dish-dialog').forEach((dialog) => { dialog.querySelector<HTMLButtonElement>('[data-close-dish]')?.addEventListener('click', () => dialog.close()); dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); }); });
+  </script>
+</BaseLayout>
