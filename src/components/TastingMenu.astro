@@ -20,7 +20,7 @@ const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
   </header>
 
   {menu.special && <div class="tasting-price" aria-label="Precio y maridajes">
-    <div><strong>{menu.special.price}</strong><span>Menú completo · 8 pases</span></div>
+    <div><strong>{menu.special.price.split(' / ')[0]}</strong><span>Por persona · Menú completo · 8 pases</span></div>
     <ul>{menu.special.details.map((detail) => <li>{detail}</li>)}</ul>
     <a class="tasting-price__wine-link" href="#bodega">Explorar la bodega <span aria-hidden="true">↓</span></a>
   </div>}
@@ -30,8 +30,8 @@ const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
   </div>
 
   <ol class="tasting-courses">
-    {courses.map((course, index) => <li class="tasting-course" id={`pase-${index + 1}`}>
-      {index % 2 === 0 && <div class="tasting-act"><span>{acts[index / 2]}</span><i aria-hidden="true"></i><span>{String(index + 1).padStart(2, '0')}—{String(index + 2).padStart(2, '0')}</span></div>}
+    {courses.map((course, index) => <li class:list={['tasting-course', { 'tasting-course--act-opener': index % 2 === 0, 'tasting-course--followup': index % 2 === 1 }]} id={`pase-${index + 1}`}>
+      {index % 2 === 0 && <div class="tasting-act"><div><span>{acts[index / 2]}</span><span>{String(index + 1).padStart(2, '0')}—{String(index + 2).padStart(2, '0')}</span></div>{menu.wines?.[index / 2] && <a href={`#vino-${index / 2 + 1}`}>En la bodega: {menu.wines[index / 2].name} ↓</a>}</div>}
       <div class="tasting-course__heading"><span>{String(index + 1).padStart(2, '0')}</span><div><small>{index === 0 ? 'El comienzo' : index === 7 ? 'El final' : `Pase ${index + 1}`}</small><h3>{courseTitle(course.name)}</h3><p>{course.description}</p></div></div>
       <MenuPhoto src={dishImage(menu.id, course.name)} name={courseTitle(course.name)} width={900} height={570} loading={index === 0 ? 'eager' : 'lazy'} priority={index === 0} />
       <AllergenInfo dish={course} theme="michelin" />
@@ -45,7 +45,7 @@ const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
     </header>
     <div class="tasting-wines__columns"><span>La selección</span><span>Copa</span><span>Botella</span></div>
     <ol class="tasting-wines__list">
-      {menu.wines.map((wine, index) => <li class="tasting-wine">
+      {menu.wines.map((wine, index) => <li class="tasting-wine" id={`vino-${index + 1}`}>
         <div class="tasting-wine__top"><span>{String(index + 1).padStart(2, '0')}</span><span>{wine.moment}</span></div>
         <div class="tasting-wine__main"><div><h3>{wine.name}</h3><p class="tasting-wine__origin">{wine.origin} <span aria-hidden="true">·</span> {wine.grapes}</p><p class="tasting-wine__note">{wine.note}</p></div><strong>{wine.glass}</strong><strong>{wine.bottle}</strong></div>
       </li>)}

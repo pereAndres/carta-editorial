@@ -21,10 +21,10 @@ const method = (name: string, sectionIndex: number) => sectionIndex === 0 ? 'Al 
   </nav>
 
   <div class="canton-sections">
-    {menu.sections.map((section, sectionIndex) => <section class:list={['canton-section', { 'canton-section--dimsum': sectionIndex === 0 }]} id={sectionId(menu.id, sectionIndex)} aria-labelledby={`canton-title-${sectionIndex}`}>
-      <header class="canton-section__heading"><span>{String(sectionIndex + 1).padStart(2, '0')}</span><div><h3 id={`canton-title-${sectionIndex}`}>{section.title}</h3>{section.note && <p>{section.note}</p>}</div></header>
+    {menu.sections.map((section, sectionIndex) => <section class:list={['canton-section', { 'canton-section--dimsum': sectionIndex === 0, 'canton-section--kitchen': sectionIndex === 2, 'canton-section--dessert': sectionIndex === 4 }]} id={sectionId(menu.id, sectionIndex)} aria-labelledby={`canton-title-${sectionIndex}`}>
+      <header class="canton-section__heading"><span>{String(sectionIndex + 1).padStart(2, '0')}</span><div><h3 id={`canton-title-${sectionIndex}`}>{section.title.split(' · ')[0]}{section.title.includes(' · ') && <small>{section.title.split(' · ')[1]}</small>}</h3>{section.note && <p>{section.note}</p>}</div><b aria-hidden="true">{sectionIndex === 0 ? 'CESTA' : sectionIndex === 2 ? 'COCINA' : sectionIndex === 4 ? 'DULCE' : ''}</b></header>
       <ol class="canton-list" start={sectionStart(sectionIndex) + 1}>
-        {section.items.map((item, itemIndex) => <li class:list={['canton-item', { 'canton-item--drink': noPhotoSections.has(section.title) }]}>
+        {section.items.map((item, itemIndex) => <li class:list={['canton-item', { 'canton-item--drink': noPhotoSections.has(section.title), 'canton-item--feature': (sectionIndex === 0 || sectionIndex === 2) && itemIndex === 0 }]}>
           {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={540} height={390} loading={sectionIndex === 0 && itemIndex === 0 ? 'eager' : 'lazy'} priority={sectionIndex === 0 && itemIndex === 0} />}
           <div class="canton-item__line"><span class="canton-item__number">{String(sectionStart(sectionIndex) + itemIndex + 1).padStart(2, '0')}</span><div class="canton-item__copy"><h4>{item.name}</h4><p>{item.description}</p></div>{item.price && <strong>{item.price}</strong>}</div>
           {(item.pieces || method(item.name, sectionIndex)) && <div class="canton-item__stamps">{item.pieces && <span>{item.pieces} por cesta</span>}{method(item.name, sectionIndex) && <span>{method(item.name, sectionIndex)}</span>}</div>}

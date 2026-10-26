@@ -28,7 +28,7 @@ const boardItems = [menu.sections[0].items[0], menu.sections[2].items[1]];
 
   <div class="bar-sections">
     {menu.sections.map((section, index) => <Fragment><section class="bar-section" id={sectionId(menu.id, index)} aria-labelledby={`bar-title-${index}`}>
-      <div class="bar-section__heading"><h3 id={`bar-title-${index}`}>{section.title}</h3>{section.note && <p>{section.note}</p>}</div>
+      <div class="bar-section__heading"><span class="bar-section__index">{String(index + 1).padStart(2, '0')}</span><h3 id={`bar-title-${index}`}>{section.title}</h3>{section.note && <p>{section.note}</p>}</div>
       <ul class="bar-list">
         {section.items.map((item) => <li class:list={['bar-item', { 'bar-item--drink': noPhotoSections.has(section.title) }]}>
           {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={144} height={144} />}

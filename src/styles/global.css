@@ -203,7 +203,9 @@ section[id] { scroll-margin-top: 14px; }
 .tasting-price { margin: 0 20px; padding: 15px 0; border-top: 1px solid #a88d71; border-bottom: 1px solid #a88d71; }
 .tasting-price > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .tasting-price strong { font: 400 28px/1 'Newsreader', Georgia, serif; }
+.tasting-price > div strong { flex: 0 0 auto; white-space: nowrap; }
 .tasting-price span { font-size: 13px; }
+.tasting-price > div span { min-width: 0; text-align: right; }
 .tasting-price ul { display: grid; gap: 4px; margin-top: 9px; list-style: none; color: #675b4f; font-size: 13px; }
 .tasting-price__wine-link { display: inline-flex; align-items: center; gap: 12px; min-height: 44px; margin-top: 7px; color: #774630; font-size: 13px; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 4px; }
 .tasting-route { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; margin: 18px 20px 5px; padding-bottom: 9px; border-bottom: 1px solid #e2d9ce; color: #9b8875; text-align: center; font: 500 12px/1 'Newsreader', Georgia, serif; }
@@ -331,3 +333,120 @@ section[id] { scroll-margin-top: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Each menu has its own reading rhythm on the small screen. */
+.bar-section__heading { display: grid; grid-template-columns: 25px minmax(0, 1fr) auto; align-items: end; gap: 7px; }
+.bar-section__index { align-self: start; padding-top: 4px; color: #895e46; font: 700 12px/1 'DM Sans', Arial, sans-serif; }
+.bar-section__heading p { grid-column: 3; }
+.bar-item { border-bottom-style: dashed; }
+.bar-item img { border: 2px solid #fff3e0; box-shadow: 2px 2px 0 #bca089; }
+.bar-item__prices { align-self: start; min-height: 52px; padding-left: 5px; border-left: 1px dotted #ba9f81; }
+.bar-board { position: relative; transform: rotate(-.35deg); }
+.bar-board::before { position: absolute; top: -9px; left: 24px; width: 34px; height: 13px; background: #d5bb8c9c; content: ''; transform: rotate(5deg); }
+
+.med-daily { margin: 0 13px 13px; padding: 15px 14px 13px; border: 1px solid #c7cbbf; border-left: 5px solid #c68528; background: #fffdf6; box-shadow: 3px 3px 0 #dce7e1; }
+.med-daily small { display: block; margin-top: 7px; color: #54727a; font-size: 11px; font-weight: 700; }
+.med-daily::after { right: 11px; }
+.med-section:not(.med-section--rice):not(.med-section--drinks) .med-item img { border-radius: 50%; border: 4px solid #e9ece2; box-shadow: 0 0 0 1px #bfd0c8; }
+.med-section:not(.med-section--rice):not(.med-section--drinks) .med-item:nth-child(even) { grid-template-columns: minmax(0, 1fr) 96px; }
+.med-section:not(.med-section--rice):not(.med-section--drinks) .med-item:nth-child(even) .photo-open { grid-column: 2; grid-row: 1; }
+.med-section:not(.med-section--rice):not(.med-section--drinks) .med-item:nth-child(even) .med-item__details { grid-column: 1; grid-row: 1; }
+.med-section--rice { margin: 22px -18px 0; padding: 25px 18px 20px; background: #dceae8; }
+.med-section--rice .med-section__heading { border-bottom: 2px solid #608b94; }
+.med-section--rice .med-item { padding-bottom: 18px; }
+.med-section--rice .med-item img { height: 215px; border: 7px solid #f8f8ee; box-shadow: 0 2px 0 #b5cdcc; }
+.med-section--rice .med-item__details { padding: 10px 7px 0; }
+.med-section--rice .med-item__title h4 { font-size: 23px; }
+.med-section--rice .med-item__title strong { color: #a5611a; }
+
+.product-route { min-width: 0; margin-top: 24px; padding: 15px 0 17px; border-top: 1px solid #8fa68d; border-bottom: 1px solid #8fa68d; }
+.product-route__heading { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 0 0 13px; }
+.product-route__heading span { color: #a35732; font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; }
+.product-route__heading strong { font: 500 24px/1 'Newsreader', Georgia, serif; }
+.product-route ol { display: flex; gap: 0; overflow-x: auto; padding: 6px 0 8px; scrollbar-width: thin; list-style: none; }
+.product-route li { position: relative; flex: 0 0 112px; min-height: 62px; padding: 27px 6px 0 0; border-top: 1px solid #7c997f; color: #355848; font-size: 12px; font-weight: 700; }
+.product-route li:last-child { flex-basis: 95px; }
+.product-route__point { position: absolute; top: -12px; left: 0; display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid #af694b; border-radius: 50%; background: #f1f1e8; color: #a35732; font-size: 10px; }
+.product-route > p { margin-top: 2px; color: #71846e; font-size: 11px; }
+.product-item { border-bottom-style: dotted; }
+.product-item img { border: 3px solid #faf8ed; box-shadow: 2px 2px 0 #a6b4a1; }
+.product-item:nth-child(odd) img { height: 128px; }
+.product-section__heading { position: relative; }
+.product-section__heading::after { position: absolute; right: 0; bottom: -4px; width: 28px; height: 6px; background: #b46642; content: ''; }
+
+.tasting-act { display: block; margin: 5px 0 17px; }
+.tasting-act > div { display: flex; align-items: center; gap: 12px; }
+.tasting-act > div::after { flex: 1; height: 1px; background: #b59a7c; content: ''; }
+.tasting-act > div span:last-child { order: 3; font: 600 11px/1 'DM Sans', Arial, sans-serif; letter-spacing: .07em; }
+.tasting-act a { display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; color: #79543d; font: 600 12px/1.25 'DM Sans', Arial, sans-serif; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.tasting-course--act-opener { padding-top: 31px; }
+.tasting-course--act-opener .photo-open { width: calc(100% + 40px); margin-left: -20px; }
+.tasting-course--act-opener img { height: 265px; margin-top: 18px; }
+.tasting-course--followup { display: grid; grid-template-columns: 105px minmax(0, 1fr); gap: 0 13px; align-items: start; padding: 24px 0 22px; }
+.tasting-course--followup .photo-open { grid-column: 1; grid-row: 1; }
+.tasting-course--followup img { width: 105px; height: 115px; margin: 0; }
+.tasting-course--followup .tasting-course__heading { display: block; grid-column: 2; grid-row: 1; }
+.tasting-course--followup .tasting-course__heading > span { font-size: 28px; }
+.tasting-course--followup h3 { font-size: 22px; }
+.tasting-course--followup p { font-size: 15px; }
+.tasting-course--followup .allergen-info { grid-column: 1 / -1; grid-row: 2; }
+.tasting-wine { scroll-margin-top: 20px; }
+
+.canton-section { position: relative; padding: 24px 10px 0; border-left: 2px solid #c9bba3; border-right: 2px solid #c9bba3; background: #fffaf0; }
+.canton-section + .canton-section { padding-top: 30px; }
+.canton-section__heading { position: relative; align-items: flex-start; }
+.canton-section__heading h3 small { display: block; margin-top: 3px; color: #b72723; font: 500 18px/1.15 'Noto Sans SC', sans-serif; }
+.canton-section__heading b { margin-left: auto; padding: 4px 5px; border: 1px solid #b72723; color: #b72723; font-size: 9px; letter-spacing: .06em; transform: rotate(-7deg); }
+.canton-section__heading b:empty { display: none; }
+.canton-item { border-bottom-style: dashed; }
+.canton-item--feature { border-bottom: 3px double #b72723; }
+.canton-item--feature img { height: 205px; }
+.canton-section--dimsum .canton-item:not(.canton-item--feature) { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 0 11px; }
+.canton-section--dimsum .canton-item:not(.canton-item--feature) .photo-open { grid-row: span 3; width: 84px; }
+.canton-section--dimsum .canton-item:not(.canton-item--feature) img { width: 84px; height: 90px; }
+.canton-section--dimsum .canton-item:not(.canton-item--feature) .canton-item__line { grid-template-columns: 24px minmax(0, 1fr) auto; gap: 6px; margin-top: 0; }
+.canton-section--dimsum .canton-item:not(.canton-item--feature) h4 { font-size: 20px; }
+.canton-section--dimsum .canton-item:not(.canton-item--feature) .canton-item__number { font-size: 18px; }
+.canton-section--dimsum .canton-item:not(.canton-item--feature) .canton-item__stamps, .canton-section--dimsum .canton-item:not(.canton-item--feature) > .allergen-info { grid-column: 2; margin-left: 30px; }
+.canton-section:not(.canton-section--dimsum) .canton-item--feature { display: block; }
+.canton-section:not(.canton-section--dimsum) .canton-item--feature .photo-open { width: 100%; }
+.canton-section:not(.canton-section--dimsum) .canton-item--feature img { width: 100%; height: 205px; }
+.canton-section:not(.canton-section--dimsum) .canton-item--feature .canton-item__line { grid-template-columns: 29px minmax(0, 1fr) auto; gap: 10px; margin-top: 9px; }
+.canton-section:not(.canton-section--dimsum) .canton-item--feature h4 { font-size: 23px; }
+.canton-section:not(.canton-section--dimsum) .canton-item--feature .canton-item__stamps, .canton-section:not(.canton-section--dimsum) .canton-item--feature > .allergen-info { margin-left: 39px; }
+.canton-section--dessert { background: #f9f1e4; }
+.canton-section--dessert .canton-item img { height: 105px; }
+
+@media (max-width: 350px) {
+  .med-section:not(.med-section--rice):not(.med-section--drinks) .med-item:nth-child(even) { grid-template-columns: minmax(0, 1fr) 82px; }
+  .tasting-course--followup { grid-template-columns: 88px minmax(0, 1fr); gap: 0 10px; }
+  .tasting-course--followup img { width: 88px; height: 100px; }
+  .tasting-course--followup h3 { font-size: 20px; }
+}
+
+@media (min-width: 700px) {
+  .bar-section__heading { grid-template-columns: 25px minmax(0, 1fr) auto; }
+  .med-daily { max-width: 850px; margin: 0 auto 20px; padding: 21px 30px; }
+  .med-section--rice { margin: 22px 0 0; padding: 25px 18px 20px; }
+  .med-section--rice .med-item img { height: 230px; }
+  .product-route { grid-column: 2; grid-row: 1; align-self: start; margin-top: 28px; }
+  .product-route ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px 16px; overflow: visible; }
+  .product-route li, .product-route li:last-child { min-height: 52px; padding-top: 24px; }
+  .product-route > p { display: none; }
+  .tasting-course--act-opener { grid-template-columns: 1fr; gap: 15px; }
+  .tasting-course--act-opener .tasting-act, .tasting-course--act-opener .tasting-course__heading, .tasting-course--act-opener .photo-open, .tasting-course--act-opener .allergen-info { grid-column: 1; }
+  .tasting-course--act-opener .tasting-act { grid-row: 1; }
+  .tasting-course--act-opener .tasting-course__heading { grid-row: 2; }
+  .tasting-course--act-opener .photo-open { grid-row: 3; width: 100%; margin: 0; }
+  .tasting-course--act-opener img { height: 350px; margin: 0; }
+  .tasting-course--act-opener .allergen-info { grid-row: 4; }
+  .tasting-course--followup { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px 25px; }
+  .tasting-course--followup .photo-open { grid-column: 1; grid-row: 1; }
+  .tasting-course--followup img { width: 100%; height: 225px; }
+  .tasting-course--followup .tasting-course__heading { grid-column: 2; grid-row: 1; }
+  .tasting-course--followup .allergen-info { grid-column: 1 / -1; grid-row: 2; }
+  .canton-section { padding: 24px 20px 0; }
+  .canton-section--dimsum .canton-list { grid-template-columns: 1fr 1fr; }
+  .canton-section--dimsum .canton-item--feature { grid-column: 1 / -1; }
+  .canton-section:not(.canton-section--dimsum) .canton-item--feature { grid-column: 1 / -1; }
+}

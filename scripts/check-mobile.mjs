@@ -40,6 +40,18 @@ for (const menu of menus) {
   await firstAllergen.locator('summary').click();
 }
 
+for (const [menu, selector] of [
+  ['bar', '.bar-board'],
+  ['mediterraneo', '.med-section--rice'],
+  ['producto', '.product-route'],
+  ['michelin', '.tasting-course--followup'],
+  ['canton', '.canton-section--kitchen'],
+]) {
+  await page.locator(`#tab-${menu}`).click();
+  await page.locator(`#panel-${menu} ${selector}`).first().scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `design/qa/${menu}-detail-390.png` });
+}
+
 await page.locator('#tab-michelin').click();
 await page.locator('#panel-michelin .tasting-price__wine-link').click();
 await page.waitForTimeout(900);
@@ -68,8 +80,18 @@ await page.screenshot({ path: 'design/qa/bar-320.png' });
 console.log('overflow320', await page.evaluate(() => document.documentElement.scrollWidth - innerWidth));
 for (const menu of menus) {
   await page.locator(`#tab-${menu}`).click();
+  await page.screenshot({ path: `design/qa/${menu}-320.png` });
   console.log(`overflow320-${menu}`, await page.evaluate(() => document.documentElement.scrollWidth - innerWidth));
   if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error(`${menu}: horizontal overflow at 320px`);
+}
+
+await page.setViewportSize({ width: 430, height: 932 });
+for (const menu of menus) {
+  await page.locator(`#tab-${menu}`).click();
+  await page.screenshot({ path: `design/qa/${menu}-430.png` });
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+  console.log(`overflow430-${menu}`, overflow);
+  if (overflow > 0) throw new Error(`${menu}: horizontal overflow at 430px`);
 }
 
 const imageStatuses = await page.evaluate(async () => {
