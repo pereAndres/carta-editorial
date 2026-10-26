@@ -2,6 +2,7 @@
 import type { RestaurantMenu } from '../data/menus';
 import { dishImage, noPhotoSections, sectionId } from '../lib/menu';
 import MenuPhoto from './MenuPhoto.astro';
+import AllergenInfo from './AllergenInfo.astro';
 
 interface Props { menu: RestaurantMenu }
 const { menu } = Astro.props;
@@ -35,7 +36,7 @@ const rice = menu.sections.flatMap((section) => section.items).find((item) => it
         {section.items.map((item) => <li class="med-item">
           {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={400} height={320} />}
           <div class="med-item__details"><div class="med-item__title"><h4>{item.name}</h4>{item.price && <strong>{item.price}</strong>}</div><p>{item.description}</p>
-            {item.tags?.filter((tag) => tag.kind === 'allergen').map((tag) => <small>{tag.label}</small>)}
+            {!noPhotoSections.has(section.title) && <AllergenInfo dish={item} theme="mediterraneo" />}
           </div>
         </li>)}
       </ul>

@@ -1,0 +1,16 @@
+---
+import type { Dish } from '../data/menus';
+import { exampleAllergens } from '../lib/allergens';
+
+interface Props { dish: Dish; theme: string }
+const { dish, theme } = Astro.props;
+const allergens = exampleAllergens(dish);
+---
+
+<details class={`allergen-info allergen-info--${theme}`}>
+  <summary>Alérgenos <span aria-hidden="true">+</span></summary>
+  <div class="allergen-info__content">
+    {allergens.length ? <ul>{allergens.map((allergen) => <li>{allergen}</li>)}</ul> : <p>Información pendiente de validar para este plato de ejemplo.</p>}
+    <small>Datos ilustrativos. Confirma ingredientes y posibles trazas con el establecimiento antes de pedir.</small>
+  </div>
+</details>

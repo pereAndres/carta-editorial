@@ -2,6 +2,7 @@
 import type { RestaurantMenu } from '../data/menus';
 import { dishImage, noPhotoSections, sectionId } from '../lib/menu';
 import MenuPhoto from './MenuPhoto.astro';
+import AllergenInfo from './AllergenInfo.astro';
 
 interface Props { menu: RestaurantMenu }
 const { menu } = Astro.props;
@@ -26,7 +27,7 @@ const sectionStart = (index: number) => menu.sections.slice(0, index).reduce((su
           {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={540} height={390} loading={sectionIndex === 0 && itemIndex === 0 ? 'eager' : 'lazy'} priority={sectionIndex === 0 && itemIndex === 0} />}
           <div class="canton-item__line"><span class="canton-item__number">{String(sectionStart(sectionIndex) + itemIndex + 1).padStart(2, '0')}</span><div class="canton-item__copy"><h4>{item.name}</h4><p>{item.description}</p></div>{item.price && <strong>{item.price}</strong>}</div>
           {item.pieces && <div class="canton-item__pieces">{item.pieces} por cesta</div>}
-          {item.tags?.filter((tag) => tag.kind === 'allergen').map((tag) => <small>{tag.label}</small>)}
+          {!noPhotoSections.has(section.title) && <AllergenInfo dish={item} theme="canton" />}
         </li>)}
       </ol>
     </section>)}

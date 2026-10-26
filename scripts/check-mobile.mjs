@@ -9,6 +9,7 @@ const browser = await chromium.launch({
 
 await mkdir('design/qa', { recursive: true });
 const menus = ['bar', 'mediterraneo', 'producto', 'michelin', 'canton'];
+const foodCounts = { bar: 14, mediterraneo: 13, producto: 11, michelin: 8, canton: 14 };
 const baseUrl = process.env.MENU_BASE_URL ?? 'http://127.0.0.1:4321/';
 const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
 await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
@@ -23,11 +24,20 @@ for (const menu of menus) {
     return {
       overflow: document.documentElement.scrollWidth - innerWidth,
       dishes: panel.querySelectorAll('[data-photo-open]').length,
+      allergenSections: panel.querySelectorAll('details.allergen-info').length,
       brokenImages: images.filter((image) => image.complete && image.naturalWidth === 0).length,
       firstSectionY: panel.querySelector('section[id]')?.getBoundingClientRect().top,
     };
   }, menu);
   console.log(menu, info);
+  if (info.allergenSections !== foodCounts[menu]) throw new Error(`${menu}: missing allergen sections`);
+  if (info.overflow > 0) throw new Error(`${menu}: horizontal overflow at 390px`);
+  const firstAllergen = page.locator(`#panel-${menu} details.allergen-info`).first();
+  await firstAllergen.locator('summary').click();
+  if (!(await firstAllergen.evaluate((element) => element.open))) throw new Error(`${menu}: allergen section did not open`);
+  await firstAllergen.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `design/qa/${menu}-allergens-390.png` });
+  await firstAllergen.locator('summary').click();
 }
 
 await page.locator('#tab-bar').click();
@@ -49,6 +59,7 @@ console.log('overflow320', await page.evaluate(() => document.documentElement.sc
 for (const menu of menus) {
   await page.locator(`#tab-${menu}`).click();
   console.log(`overflow320-${menu}`, await page.evaluate(() => document.documentElement.scrollWidth - innerWidth));
+  if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error(`${menu}: horizontal overflow at 320px`);
 }
 
 const imageStatuses = await page.evaluate(async () => {
