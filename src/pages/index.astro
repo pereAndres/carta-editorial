@@ -112,6 +112,8 @@ const menuViews = [BarMenu, MediterraneanMenu, ProductMenu, TastingMenu, CantonM
           photoTitle.textContent = button.dataset.photoName ?? '';
           photoNotice.hidden = true;
           photoDialog.dataset.modelAvailable = button.dataset.photoName === 'Patatas bravas' ? 'true' : 'false';
+          const modelButton = photoDialog.querySelector<HTMLButtonElement>('[data-3d-button]');
+          if (modelButton) modelButton.textContent = photoDialog.dataset.modelAvailable === 'true' ? 'Ver en 3D' : '3D próximamente';
           if (photoDialog.dataset.modelAvailable === 'true') modelReady ??= import('@google/model-viewer');
           photoDialog.showModal();
         });
@@ -140,6 +142,7 @@ const menuViews = [BarMenu, MediterraneanMenu, ProductMenu, TastingMenu, CantonM
         else if (arMessage) arMessage.textContent = 'Este navegador no permite abrir la cámara para AR. Puedes girar el plato en 3D aquí.';
       });
       arDialog?.addEventListener('click', (event) => { if (event.target === arDialog) arDialog.close(); });
+      arDialog?.addEventListener('close', () => { lastPhotoButton?.focus(); });
     </script>
   </body>
 </html>
