@@ -48,9 +48,9 @@ const menuViews = [BarMenu, MediterraneanMenu, ProductMenu, TastingMenu, CantonM
     </dialog>
 
     <dialog class="ar-dialog" id="ar-dialog" aria-labelledby="ar-dialog-title">
-      <div class="ar-dialog__top"><div><small>Prueba de realidad aumentada</small><h2 id="ar-dialog-title">Patatas bravas en tu mesa</h2></div><button type="button" class="ar-dialog__close" data-ar-close aria-label="Cerrar vista 3D">×</button></div>
-      <model-viewer id="bravas-model" src="/models/patatas-bravas.glb" poster="/images/menus/bar/patatas-bravas.webp" alt="Modelo 3D de prueba de unas patatas bravas en un plato de 24 centímetros" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor" camera-controls touch-action="pan-y" shadow-intensity="1" exposure="1.1" camera-orbit="0deg 65deg 0.55m" field-of-view="30deg" loading="eager"></model-viewer>
-      <div class="ar-dialog__details"><p>Plato de prueba · 24 cm de diámetro · Patatas, salsa brava, alioli y perejil.</p><button type="button" data-ar-launch disabled>Preparando plato 3D…</button><span data-ar-message>Apunta la cámara a una superficie plana y mueve el móvil lentamente.</span></div>
+      <div class="ar-dialog__top"><div><small>Prueba con fotografías reales</small><h2 id="ar-dialog-title">Un plato real en tu mesa</h2></div><button type="button" class="ar-dialog__close" data-ar-close aria-label="Cerrar vista 3D">×</button></div>
+      <model-viewer id="real-plate-model" src="/models/plato-real-15cm.glb" poster="/images/plato-real-prueba.jpeg" alt="Modelo 3D de prueba reconstruido de fotografías reales, servido en un plato blanco de 15 por 15 centímetros" ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" ar-placement="floor" camera-controls touch-action="pan-y" shadow-intensity="1" exposure="1.1" camera-orbit="0deg 65deg 0.34m" field-of-view="30deg" loading="eager"></model-viewer>
+      <div class="ar-dialog__details"><p>Reconstruido a partir de tus fotos · Plato de 15 × 15 cm. La forma de la comida es aproximada; este prototipo se abre desde la foto de las bravas para probar la función.</p><button type="button" data-ar-launch disabled>Preparando plato 3D…</button><span data-ar-message>Apunta la cámara a una superficie plana y mueve el móvil lentamente.</span></div>
     </dialog>
 
     <script>
@@ -90,7 +90,7 @@ const menuViews = [BarMenu, MediterraneanMenu, ProductMenu, TastingMenu, CantonM
       const photoTitle = photoDialog?.querySelector<HTMLElement>('#photo-dialog-title');
       const photoNotice = photoDialog?.querySelector<HTMLElement>('[data-3d-notice]');
       const arDialog = document.querySelector<HTMLDialogElement>('#ar-dialog');
-      const modelViewer = document.querySelector<HTMLElement & { canActivateAR?: boolean; activateAR?: () => Promise<void> }>('#bravas-model');
+      const modelViewer = document.querySelector<HTMLElement & { canActivateAR?: boolean; activateAR?: () => Promise<void> }>('#real-plate-model');
       const arMessage = arDialog?.querySelector<HTMLElement>('[data-ar-message]');
       const arLaunch = arDialog?.querySelector<HTMLButtonElement>('[data-ar-launch]');
       let modelReady: Promise<unknown> | null = null;
@@ -113,7 +113,7 @@ const menuViews = [BarMenu, MediterraneanMenu, ProductMenu, TastingMenu, CantonM
           photoNotice.hidden = true;
           photoDialog.dataset.modelAvailable = button.dataset.photoName === 'Patatas bravas' ? 'true' : 'false';
           const modelButton = photoDialog.querySelector<HTMLButtonElement>('[data-3d-button]');
-          if (modelButton) modelButton.textContent = photoDialog.dataset.modelAvailable === 'true' ? 'Ver en 3D' : '3D próximamente';
+          if (modelButton) modelButton.textContent = photoDialog.dataset.modelAvailable === 'true' ? 'Probar plato real en 3D' : '3D próximamente';
           if (photoDialog.dataset.modelAvailable === 'true') modelReady ??= import('@google/model-viewer');
           photoDialog.showModal();
         });
