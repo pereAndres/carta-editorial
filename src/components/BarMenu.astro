@@ -1,0 +1,45 @@
+---
+import type { RestaurantMenu } from '../data/menus';
+import { dishImage, noPhotoSections, sectionId } from '../lib/menu';
+import MenuPhoto from './MenuPhoto.astro';
+
+interface Props { menu: RestaurantMenu }
+const { menu } = Astro.props;
+const feature = menu.sections.flatMap((section) => section.items).find((item) => item.name === 'Patatas bravas');
+---
+
+<article class="bar-menu" aria-label={`Carta de ${menu.name}`}>
+  <header class="bar-heading">
+    <span class="bar-heading__overline">Bar de tapas · Desde 1987</span>
+    <h2>La Buena<br class="bar-heading__break" /> Sombra<span class="bar-heading__dot">.</span></h2>
+    <p>La barra de siempre, para quedarse un rato más.</p>
+  </header>
+
+  {feature && <figure class="bar-feature">
+    <MenuPhoto src={dishImage(menu.id, feature.name)} name={feature.name} width={900} height={600} loading="eager" priority />
+    <figcaption><strong>De la casa</strong><span>Patatas bravas · {feature.price}</span></figcaption>
+  </figure>}
+
+  <nav class="bar-jumps" aria-label="Secciones de la carta del bar">
+    {menu.sections.map((section, index) => <a href={`#${sectionId(menu.id, index)}`}>{section.title}</a>)}
+  </nav>
+
+  <div class="bar-sections">
+    {menu.sections.map((section, index) => <section class="bar-section" id={sectionId(menu.id, index)} aria-labelledby={`bar-title-${index}`}>
+      <div class="bar-section__heading"><h3 id={`bar-title-${index}`}>{section.title}</h3>{section.note && <p>{section.note}</p>}</div>
+      <ul class="bar-list">
+        {section.items.map((item) => <li class:list={['bar-item', { 'bar-item--drink': noPhotoSections.has(section.title) }]}>
+          {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={144} height={144} />}
+          <div class="bar-item__copy"><h4>{item.name}</h4><p>{item.description}</p>
+            {item.tags?.filter((tag) => tag.kind === 'allergen').map((tag) => <span class="bar-item__allergen">{tag.label}</span>)}
+          </div>
+          <div class="bar-item__prices">
+            {item.halfPrice && <span><small>Media</small>{item.halfPrice}</span>}
+            {item.price && <span><small>{item.halfPrice ? 'Ración' : ''}</small>{item.price}</span>}
+          </div>
+        </li>)}
+      </ul>
+    </section>)}
+  </div>
+  <footer class="bar-footer"><span>Pregunta por los alérgenos antes de pedir.</span><a href="#cartas">Cambiar carta ↑</a></footer>
+</article>

@@ -1,0 +1,37 @@
+---
+import type { RestaurantMenu } from '../data/menus';
+import { dishImage } from '../lib/menu';
+import MenuPhoto from './MenuPhoto.astro';
+
+interface Props { menu: RestaurantMenu }
+const { menu } = Astro.props;
+const courses = menu.sections[0].items;
+const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
+---
+
+<article class="tasting-menu" aria-label={`Menú degustación de ${menu.name}`}>
+  <header class="tasting-heading">
+    <div class="tasting-heading__brand">UMBRAL</div>
+    <p>Menú degustación</p>
+    <h2>Ocho momentos</h2>
+    <span>Un recorrido por el litoral y la huerta, servido a su ritmo.</span>
+  </header>
+
+  {menu.special && <div class="tasting-price" aria-label="Precio y maridajes">
+    <div><strong>{menu.special.price}</strong><span>Menú completo · 8 pases</span></div>
+    <ul>{menu.special.details.map((detail) => <li>{detail}</li>)}</ul>
+  </div>}
+
+  <div class="tasting-route" aria-label="Secuencia de ocho pases">
+    {courses.map((_, index) => <span>{String(index + 1).padStart(2, '0')}</span>)}
+  </div>
+
+  <ol class="tasting-courses">
+    {courses.map((course, index) => <li class="tasting-course" id={`pase-${index + 1}`}>
+      <div class="tasting-course__heading"><span>{String(index + 1).padStart(2, '0')}</span><div><small>{index === 0 ? 'El comienzo' : index === 7 ? 'El final' : `Pase ${index + 1}`}</small><h3>{courseTitle(course.name)}</h3><p>{course.description}</p></div></div>
+      <MenuPhoto src={dishImage(menu.id, course.name)} name={courseTitle(course.name)} width={900} height={570} loading={index === 0 ? 'eager' : 'lazy'} priority={index === 0} />
+      {course.tags?.filter((tag) => tag.kind === 'allergen').map((tag) => <small class="tasting-course__allergen">{tag.label}</small>)}
+    </li>)}
+  </ol>
+  <footer class="tasting-footer"><p>El menú se sirve a mesa completa. Indícanos cualquier restricción alimentaria al reservar.</p><a href="#cartas">Cambiar carta ↑</a></footer>
+</article>

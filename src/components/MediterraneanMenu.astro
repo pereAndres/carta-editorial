@@ -1,0 +1,45 @@
+---
+import type { RestaurantMenu } from '../data/menus';
+import { dishImage, noPhotoSections, sectionId } from '../lib/menu';
+import MenuPhoto from './MenuPhoto.astro';
+
+interface Props { menu: RestaurantMenu }
+const { menu } = Astro.props;
+const rice = menu.sections.flatMap((section) => section.items).find((item) => item.name === 'Arroz seco de marisco');
+---
+
+<article class="med-menu" aria-label={`Carta de ${menu.name}`}>
+  <header class="med-heading">
+    <div class="med-heading__brand"><span aria-hidden="true">◒</span><h2>Casa Salina</h2></div>
+    <p>Cocina mediterránea · Mercado y temporada</p>
+  </header>
+
+  {menu.special && <aside class="med-daily" aria-label="Menú del día">
+    <div><span>{menu.special.label}</span><strong>{menu.special.title}</strong><p>{menu.special.description}</p></div>
+    <b>{menu.special.price}</b>
+  </aside>}
+
+  {rice && <figure class="med-feature">
+    <MenuPhoto src={dishImage(menu.id, rice.name)} name={rice.name} width={1000} height={620} loading="eager" priority />
+    <figcaption><span>El arroz, en el centro</span><strong>{rice.name}</strong></figcaption>
+  </figure>}
+
+  <nav class="med-jumps" aria-label="Secciones de Casa Salina">
+    {menu.sections.map((section, index) => <a href={`#${sectionId(menu.id, index)}`}>{section.title}</a>)}
+  </nav>
+
+  <div class="med-sections">
+    {menu.sections.map((section, index) => <section class:list={['med-section', { 'med-section--rice': section.title === 'Arroces', 'med-section--drinks': noPhotoSections.has(section.title) }]} id={sectionId(menu.id, index)} aria-labelledby={`med-title-${index}`}>
+      <header class="med-section__heading"><h3 id={`med-title-${index}`}>{section.title}</h3>{section.note && <p>{section.note}</p>}</header>
+      <ul class="med-list">
+        {section.items.map((item) => <li class="med-item">
+          {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={400} height={320} />}
+          <div class="med-item__details"><div class="med-item__title"><h4>{item.name}</h4>{item.price && <strong>{item.price}</strong>}</div><p>{item.description}</p>
+            {item.tags?.filter((tag) => tag.kind === 'allergen').map((tag) => <small>{tag.label}</small>)}
+          </div>
+        </li>)}
+      </ul>
+    </section>)}
+  </div>
+  <footer class="med-footer"><span>¿Alguna alergia o intolerancia? Cuéntanoslo.</span><a href="#cartas">Cambiar carta ↑</a></footer>
+</article>

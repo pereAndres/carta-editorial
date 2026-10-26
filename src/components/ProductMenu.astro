@@ -1,0 +1,44 @@
+---
+import type { RestaurantMenu } from '../data/menus';
+import { dishImage, noPhotoSections, sectionId } from '../lib/menu';
+import MenuPhoto from './MenuPhoto.astro';
+
+interface Props { menu: RestaurantMenu }
+const { menu } = Astro.props;
+const feature = menu.sections.flatMap((section) => section.items).find((item) => item.name === 'Gamba roja de Palamós');
+---
+
+<article class="product-menu" aria-label={`Carta de ${menu.name}`}>
+  <header class="product-heading">
+    <span class="product-heading__rule" aria-hidden="true"></span>
+    <h2>L’Alzina</h2>
+    <p>La cosecha y la lonja escriben la carta.</p>
+  </header>
+
+  {feature && <figure class="product-feature">
+    <MenuPhoto src={dishImage(menu.id, feature.name)} name={feature.name} width={950} height={580} loading="eager" priority />
+    <figcaption><span>Hoy en la costa</span><strong>{feature.name}</strong><small>Palamós · {feature.price}</small></figcaption>
+  </figure>}
+
+  <nav class="product-jumps" aria-label="Capítulos de la carta de L’Alzina">
+    {menu.sections.map((section, index) => <a href={`#${sectionId(menu.id, index)}`}>{section.title}</a>)}
+  </nav>
+
+  <div class="product-sections">
+    {menu.sections.map((section, index) => <section class="product-section" id={sectionId(menu.id, index)} aria-labelledby={`product-title-${index}`}>
+      <header class="product-section__heading"><span>{String(index + 1).padStart(2, '0')}</span><h3 id={`product-title-${index}`}>{section.title}</h3>{section.note && <p>{section.note}</p>}</header>
+      <ul class="product-list">
+        {section.items.map((item) => <li class:list={['product-item', { 'product-item--drink': noPhotoSections.has(section.title) }]}>
+          {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={400} height={480} />}
+          <div class="product-item__copy">
+            {item.origin && <span class="product-item__origin">Origen: {item.origin}</span>}
+            <h4>{item.name}</h4><p>{item.description}</p>
+            <div class="product-item__bottom">{item.price && <strong>{item.price}</strong>}{item.tags?.some((tag) => tag.kind === 'seasonal') && <span>De temporada</span>}</div>
+            {item.tags?.filter((tag) => tag.kind === 'allergen').map((tag) => <small>{tag.label}</small>)}
+          </div>
+        </li>)}
+      </ul>
+    </section>)}
+  </div>
+  <footer class="product-footer"><p>El producto disponible puede variar con la temporada y la pesca. Consulta al equipo por alérgenos.</p><a href="#cartas">Cambiar carta ↑</a></footer>
+</article>

@@ -1,0 +1,14 @@
+---
+interface Props {
+  src: string;
+  name: string;
+  width: number;
+  height: number;
+  loading?: 'eager' | 'lazy';
+  priority?: boolean;
+}
+const { src, name, width, height, loading = 'lazy', priority = false } = Astro.props;
+---
+<button class="photo-open" type="button" data-photo-open data-photo-src={src} data-photo-name={name} aria-label={`Ampliar foto de ${name}`}>
+  <img src={src} alt="" width={width} height={height} loading={loading} fetchpriority={priority ? 'high' : undefined} />
+</button>
