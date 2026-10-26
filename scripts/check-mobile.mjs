@@ -69,8 +69,12 @@ const imageStatuses = await page.evaluate(async () => {
 console.log('foodPhotos', imageStatuses.length, 'missing', imageStatuses.filter((item) => item.status !== 200));
 
 await page.setViewportSize({ width: 1280, height: 850 });
-await page.locator('#tab-bar').click();
-await page.screenshot({ path: 'design/qa/bar-1280.png' });
-console.log('overflow1280', await page.evaluate(() => document.documentElement.scrollWidth - innerWidth));
+for (const menu of menus) {
+  await page.locator(`#tab-${menu}`).click();
+  await page.screenshot({ path: `design/qa/${menu}-1280.png` });
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+  console.log(`overflow1280-${menu}`, overflow);
+  if (overflow > 0) throw new Error(`${menu}: horizontal overflow at 1280px`);
+}
 
 await browser.close();

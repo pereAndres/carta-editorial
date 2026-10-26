@@ -7,6 +7,7 @@ import AllergenInfo from './AllergenInfo.astro';
 interface Props { menu: RestaurantMenu }
 const { menu } = Astro.props;
 const courses = menu.sections[0].items;
+const acts = ['I · La huerta', 'II · El mar', 'III · Brasa y tierra', 'IV · El final'];
 const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
 ---
 
@@ -29,6 +30,7 @@ const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
 
   <ol class="tasting-courses">
     {courses.map((course, index) => <li class="tasting-course" id={`pase-${index + 1}`}>
+      {index % 2 === 0 && <div class="tasting-act"><span>{acts[index / 2]}</span><i aria-hidden="true"></i><span>{String(index + 1).padStart(2, '0')}—{String(index + 2).padStart(2, '0')}</span></div>}
       <div class="tasting-course__heading"><span>{String(index + 1).padStart(2, '0')}</span><div><small>{index === 0 ? 'El comienzo' : index === 7 ? 'El final' : `Pase ${index + 1}`}</small><h3>{courseTitle(course.name)}</h3><p>{course.description}</p></div></div>
       <MenuPhoto src={dishImage(menu.id, course.name)} name={courseTitle(course.name)} width={900} height={570} loading={index === 0 ? 'eager' : 'lazy'} priority={index === 0} />
       <AllergenInfo dish={course} theme="michelin" />

@@ -7,6 +7,7 @@ import AllergenInfo from './AllergenInfo.astro';
 interface Props { menu: RestaurantMenu }
 const { menu } = Astro.props;
 const sectionStart = (index: number) => menu.sections.slice(0, index).reduce((sum, section) => sum + section.items.length, 0);
+const method = (name: string, sectionIndex: number) => sectionIndex === 0 ? 'Al vapor' : name.includes('wok') || name.includes('brócoli') ? 'Al wok' : name.includes('char siu') ? 'Asado' : undefined;
 ---
 
 <article class="canton-menu" aria-label={`Carta de ${menu.name}`}>
@@ -26,7 +27,7 @@ const sectionStart = (index: number) => menu.sections.slice(0, index).reduce((su
         {section.items.map((item, itemIndex) => <li class:list={['canton-item', { 'canton-item--drink': noPhotoSections.has(section.title) }]}>
           {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={540} height={390} loading={sectionIndex === 0 && itemIndex === 0 ? 'eager' : 'lazy'} priority={sectionIndex === 0 && itemIndex === 0} />}
           <div class="canton-item__line"><span class="canton-item__number">{String(sectionStart(sectionIndex) + itemIndex + 1).padStart(2, '0')}</span><div class="canton-item__copy"><h4>{item.name}</h4><p>{item.description}</p></div>{item.price && <strong>{item.price}</strong>}</div>
-          {item.pieces && <div class="canton-item__pieces">{item.pieces} por cesta</div>}
+          {(item.pieces || method(item.name, sectionIndex)) && <div class="canton-item__stamps">{item.pieces && <span>{item.pieces} por cesta</span>}{method(item.name, sectionIndex) && <span>{method(item.name, sectionIndex)}</span>}</div>}
           {!noPhotoSections.has(section.title) && <AllergenInfo dish={item} theme="canton" />}
         </li>)}
       </ol>

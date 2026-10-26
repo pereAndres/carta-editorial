@@ -7,6 +7,7 @@ import AllergenInfo from './AllergenInfo.astro';
 interface Props { menu: RestaurantMenu }
 const { menu } = Astro.props;
 const feature = menu.sections.flatMap((section) => section.items).find((item) => item.name === 'Patatas bravas');
+const boardItems = [menu.sections[0].items[0], menu.sections[2].items[1]];
 ---
 
 <article class="bar-menu" aria-label={`Carta de ${menu.name}`}>
@@ -26,7 +27,7 @@ const feature = menu.sections.flatMap((section) => section.items).find((item) =>
   </nav>
 
   <div class="bar-sections">
-    {menu.sections.map((section, index) => <section class="bar-section" id={sectionId(menu.id, index)} aria-labelledby={`bar-title-${index}`}>
+    {menu.sections.map((section, index) => <Fragment><section class="bar-section" id={sectionId(menu.id, index)} aria-labelledby={`bar-title-${index}`}>
       <div class="bar-section__heading"><h3 id={`bar-title-${index}`}>{section.title}</h3>{section.note && <p>{section.note}</p>}</div>
       <ul class="bar-list">
         {section.items.map((item) => <li class:list={['bar-item', { 'bar-item--drink': noPhotoSections.has(section.title) }]}>
@@ -40,7 +41,11 @@ const feature = menu.sections.flatMap((section) => section.items).find((item) =>
           </div>
         </li>)}
       </ul>
-    </section>)}
+    </section>{index === 0 && <aside class="bar-board" aria-label="Sugerencias de la casa">
+      <div class="bar-board__heading"><span>La pizarra</span><strong>Para empezar</strong></div>
+      <ul>{boardItems.map((item) => <li><span>{item.name}</span><b>{item.price}</b></li>)}</ul>
+      <p>Dos favoritos de la barra para abrir mesa.</p>
+    </aside>}</Fragment>)}
   </div>
   <footer class="bar-footer"><span>Pregunta por los alérgenos antes de pedir.</span><a href="#cartas">Cambiar carta ↑</a></footer>
 </article>

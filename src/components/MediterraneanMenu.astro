@@ -36,6 +36,7 @@ const rice = menu.sections.flatMap((section) => section.items).find((item) => it
         {section.items.map((item) => <li class="med-item">
           {!noPhotoSections.has(section.title) && <MenuPhoto src={dishImage(menu.id, item.name)} name={item.name} width={400} height={320} />}
           <div class="med-item__details"><div class="med-item__title"><h4>{item.name}</h4>{item.price && <strong>{item.price}</strong>}</div><p>{item.description}</p>
+            {section.title === 'Arroces' && <div class="med-rice-note"><span>Para compartir</span><span>Mín. 2 personas</span><span>Precio por persona</span></div>}
             {!noPhotoSections.has(section.title) && <AllergenInfo dish={item} theme="mediterraneo" />}
           </div>
         </li>)}
