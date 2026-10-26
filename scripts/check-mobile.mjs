@@ -40,6 +40,16 @@ for (const menu of menus) {
   await firstAllergen.locator('summary').click();
 }
 
+await page.locator('#tab-michelin').click();
+await page.locator('#panel-michelin .tasting-price__wine-link').click();
+await page.waitForTimeout(900);
+const wineCount = await page.locator('#panel-michelin .tasting-wine').count();
+if (wineCount !== 4) throw new Error(`Expected 4 wine entries, found ${wineCount}`);
+const wineTop = await page.locator('#bodega').evaluate((element) => element.getBoundingClientRect().top);
+if (wineTop > 100) throw new Error(`Wine link did not reach the wine section: ${wineTop}px`);
+await page.screenshot({ path: 'design/qa/michelin-wines-390.png' });
+console.log('wineSection', wineCount, 'entries');
+
 await page.locator('#tab-bar').click();
 await page.locator('#panel-bar [data-photo-open]').first().click();
 console.log('dialogOpen', await page.locator('#photo-dialog').evaluate((element) => element.open));

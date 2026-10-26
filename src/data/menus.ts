@@ -29,6 +29,15 @@ export type RestaurantMenu = {
   intro: string;
   style: string;
   sections: MenuSection[];
+  wines?: {
+    name: string;
+    origin: string;
+    grapes: string;
+    note: string;
+    moment: string;
+    glass: string;
+    bottle: string;
+  }[];
   special?: {
     label: string;
     title: string;
@@ -253,6 +262,12 @@ export const menus: RestaurantMenu[] = [
       price: '145 € / persona',
       details: ['Maridaje de vinos · 85 €', 'Maridaje sin alcohol · 48 €', 'Indícanos cualquier restricción alimentaria al reservar'],
     },
+    wines: [
+      { name: 'Burbuja de bienvenida', origin: 'Penedès', grapes: 'Xarel·lo · Macabeo', note: 'Fresco y delicado, para abrir el recorrido.', moment: 'La huerta', glass: '14 €', bottle: '68 €' },
+      { name: 'Blanco atlántico', origin: 'Rías Baixas', grapes: 'Albariño', note: 'Cítrico y salino, junto a los pases de mar.', moment: 'El mar', glass: '13 €', bottle: '62 €' },
+      { name: 'Tinto de montaña', origin: 'Priorat', grapes: 'Garnacha', note: 'Fruta madura y profundidad para la brasa.', moment: 'Brasa y tierra', glass: '16 €', bottle: '78 €' },
+      { name: 'Final de Jerez', origin: 'Jerez', grapes: 'Pedro Ximénez', note: 'Una copa pequeña para acompañar el chocolate.', moment: 'El final', glass: '12 €', bottle: '58 €' },
+    ],
     sections: [
       {
         title: 'El recorrido',

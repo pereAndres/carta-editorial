@@ -22,6 +22,7 @@ const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
   {menu.special && <div class="tasting-price" aria-label="Precio y maridajes">
     <div><strong>{menu.special.price}</strong><span>Menú completo · 8 pases</span></div>
     <ul>{menu.special.details.map((detail) => <li>{detail}</li>)}</ul>
+    <a class="tasting-price__wine-link" href="#bodega">Explorar la bodega <span aria-hidden="true">↓</span></a>
   </div>}
 
   <div class="tasting-route" aria-label="Secuencia de ocho pases">
@@ -36,5 +37,20 @@ const courseTitle = (name: string) => name.replace(/^\d{2}\s*·\s*/, '');
       <AllergenInfo dish={course} theme="michelin" />
     </li>)}
   </ol>
+  {menu.wines && <section class="tasting-wines" id="bodega" aria-labelledby="tasting-wines-title">
+    <header class="tasting-wines__heading">
+      <span>Selección del sumiller · Carta de ejemplo</span>
+      <h2 id="tasting-wines-title">La bodega</h2>
+      <p>Cuatro estilos para seguir el paisaje, también disponibles por copa.</p>
+    </header>
+    <div class="tasting-wines__columns"><span>La selección</span><span>Copa</span><span>Botella</span></div>
+    <ol class="tasting-wines__list">
+      {menu.wines.map((wine, index) => <li class="tasting-wine">
+        <div class="tasting-wine__top"><span>{String(index + 1).padStart(2, '0')}</span><span>{wine.moment}</span></div>
+        <div class="tasting-wine__main"><div><h3>{wine.name}</h3><p class="tasting-wine__origin">{wine.origin} <span aria-hidden="true">·</span> {wine.grapes}</p><p class="tasting-wine__note">{wine.note}</p></div><strong>{wine.glass}</strong><strong>{wine.bottle}</strong></div>
+      </li>)}
+    </ol>
+    <p class="tasting-wines__foot">Selección y precios ilustrativos. Consulta las botellas, añadas y alérgenos disponibles en el restaurante.</p>
+  </section>}
   <footer class="tasting-footer"><p>El menú se sirve a mesa completa. Indícanos cualquier restricción alimentaria al reservar.</p><a href="#cartas">Cambiar carta ↑</a></footer>
 </article>
