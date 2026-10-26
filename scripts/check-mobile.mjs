@@ -9,8 +9,9 @@ const browser = await chromium.launch({
 
 await mkdir('design/qa', { recursive: true });
 const menus = ['bar', 'mediterraneo', 'producto', 'michelin', 'canton'];
+const baseUrl = process.env.MENU_BASE_URL ?? 'http://127.0.0.1:4321/';
 const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
-await page.goto('http://127.0.0.1:4321/', { waitUntil: 'domcontentloaded' });
+await page.goto(baseUrl, { waitUntil: 'domcontentloaded' });
 await page.waitForTimeout(800);
 
 for (const menu of menus) {
